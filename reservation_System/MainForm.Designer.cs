@@ -52,16 +52,21 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.dtpk = new System.Windows.Forms.DateTimePicker();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.date_lb = new System.Windows.Forms.Label();
             this.panel3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResSts)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.gb_libSts.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.groupBox1);
             this.panel3.Controls.Add(this.groupBox4);
             this.panel3.Controls.Add(this.groupBox3);
             this.panel3.Controls.Add(this.groupBox2);
@@ -200,7 +205,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label6.Location = new System.Drawing.Point(6, 24);
+            this.label6.Location = new System.Drawing.Point(6, 25);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(72, 15);
             this.label6.TabIndex = 6;
@@ -323,6 +328,37 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "사용중인 좌석 수 :";
             // 
+            // dtpk
+            // 
+            this.dtpk.Location = new System.Drawing.Point(67, 31);
+            this.dtpk.Name = "dtpk";
+            this.dtpk.Size = new System.Drawing.Size(217, 25);
+            this.dtpk.TabIndex = 11;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.date_lb);
+            this.groupBox1.Controls.Add(this.dtpk);
+            this.groupBox1.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.groupBox1.Location = new System.Drawing.Point(646, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox1.Size = new System.Drawing.Size(308, 112);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "날짜 선택";
+            // 
+            // date_lb
+            // 
+            this.date_lb.AutoSize = true;
+            this.date_lb.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.date_lb.Location = new System.Drawing.Point(15, 35);
+            this.date_lb.Name = "date_lb";
+            this.date_lb.Size = new System.Drawing.Size(37, 15);
+            this.date_lb.TabIndex = 14;
+            this.date_lb.Text = "일자";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -340,6 +376,8 @@
             this.groupBox2.PerformLayout();
             this.gb_libSts.ResumeLayout(false);
             this.gb_libSts.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -369,7 +407,9 @@
         private System.Windows.Forms.Label noUsedCount;
         private System.Windows.Forms.Label usedCount;
         private System.Windows.Forms.Panel seatList;
-
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label date_lb;
+        private System.Windows.Forms.DateTimePicker dtpk;
     }
 }
 

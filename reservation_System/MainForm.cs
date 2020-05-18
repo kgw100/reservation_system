@@ -18,11 +18,13 @@ namespace reservation_System
 
         public MainForm()
         {
-            //Xml Data 불러오기
-            DataManager.Load();
+            //오늘 xml Data 불러오기 
+            DataManager.Load(System.DateTime.Now.ToString("yyyy-MM-dd"));
             //UI를 미리 그리기전에 등록을 해두어야함 
             Seat.change_seatCntText += new Change_SeatCntText(set_UsedSeatCnt);
             InitializeComponent();
+            //dateTimePicker 이벤트 핸들러 등록
+            dtpk.ValueChanged += new EventHandler(dtpk_ValueChanged);
             //버튼 리스트 객체 생성 
             newButton = new Button[Seat.total_SeatCnt];
             //좌석현황 버튼만들기
@@ -68,7 +70,6 @@ namespace reservation_System
                     newButton[num].BackColor = Color.FromArgb(230, 0, 51, 255);
                 else
                     newButton[num].BackColor = Color.FromArgb(250, 204, 204, 204);
-                //newButton[num].BackColor = Color.FromArgb(230, 0, 51, 255);
                 // 버튼 동적 생성 
                 int btn_Row = num; // 행 번호, 첫 줄은 세로로 이동시키지 않기 위해 1을 뺌 
                 int btn_ColumnCnt = 20; // 한 줄당 버튼 개수
@@ -119,21 +120,20 @@ namespace reservation_System
                 Button reservBtn = sender as Button;
                 if (reservBtn == null)
                     MessageBox.Show("예약버튼에 오류가 발생했습니다.");
-                int? pos = int.Parse(tb_pos.Text);
-
-                //pos 체크
-                if (pos == null)
+                // 원래는 
+                if (string.IsNullOrEmpty(tb_pos.Text))
                 {
                     MessageBox.Show("좌석번호가 입력되지않았습니다. 좌석버튼을 클릭하세요.");
                     return;
                 }
+                int? pos = int.Parse(tb_pos.Text);
                 int btn_num = pos.Value;
                 if (DataManager.seat_List[btn_num - 1].isUsed)
                     UsedBtn_Click();
                 else
                 {
                     noUsedBtn_Click(btn_num);
-                    DataManager.Save();
+                    DataManager.Save(Get_PickTime());
                 }
             }
             catch (Exception ex)
@@ -149,14 +149,14 @@ namespace reservation_System
         //사용 가능한 좌석버튼 클릭
         private void noUsedBtn_Click(int btn_num)
         {
-            int? id = int.Parse(tb_id.Text);
-            string name = tb_name.Text;
-            //id 체크
-            if (id == null)
+            //학번 체크
+            if (string.IsNullOrEmpty(tb_id.Text))
             {
                 MessageBox.Show("학번이 입력되지않았습니다. 다시 입력하세요.");
                 return;
             }
+            int? id = int.Parse(tb_id.Text);
+            string name = tb_name.Text;
             //이름체크
             if (string.IsNullOrEmpty(name))
             {
@@ -225,6 +225,11 @@ namespace reservation_System
         //종료 버튼 
         private void cls_btn_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(tb_pos.Text))
+            {
+                MessageBox.Show("좌석번호가 입력되지않았습니다. 좌석버튼을 클릭하세요.");
+                return;
+            }
             int pos = int.Parse(tb_pos.Text);
             bool isUsed = DataManager.seat_List[pos - 1].isUsed;
             // 비어있는 좌석 체크
@@ -249,7 +254,7 @@ namespace reservation_System
                         //삭제하려는 좌석의 학생ID에 해당하는 ROW 삭제 
                         dgvResSts.Rows.Remove(row);
                         //변경사항 저장 
-                        DataManager.Save();
+                        DataManager.Save(Get_PickTime());
                         //텍스트 칸 비우기 
                         tb_id.Clear();
                         tb_name.Clear();
@@ -270,6 +275,40 @@ namespace reservation_System
             }
             else
                 make_Btn();
+        }
+        //날짜 선택시 값이 변경될때
+        private void dtpk_ValueChanged(object sender, EventArgs e)
+        {
+            string pickTime = Get_PickTime();
+            //string nowTime = System.DateTime.Now.ToString("yyyy-MM-dd");
+            DataManager.Load(pickTime);
+            //데이터 그리드 뷰에 불러오기전에 데이터 비우기
+            dgvResSts.Rows.Clear();
+            //데이터 그리드 뷰에 데이터 랜더링 
+            dgvResSts_Load();
+            //dgvResSts.Refresh();
+            //버튼 재랜더링 
+            int pos = 0;
+            foreach (SeatInfo seat in DataManager.seat_List)
+            {
+                if (seat.isUsed == false)
+                    newButton[pos].BackColor = Color.FromArgb(230, 0, 51, 255);
+                else
+                    newButton[pos].BackColor = Color.FromArgb(250, 204, 204, 204);
+                pos++;
+            }
+            // 사용중인 좌석 구하기
+            Seat.used_SeatCnt = DataManager.seat_List.Where((x) => x.isUsed == true).Count();
+            //전체 독서실 좌석수 등록
+            totalCount.Text = Seat.total_SeatCnt.ToString();
+            usedCount.Text = Seat.used_SeatCnt.ToString();
+            noUsedCount.Text = Seat.noUsed_SeatCnt.ToString();
+        }
+        //현재 선택된 날짜 구하기 
+        private string Get_PickTime()
+        {
+            string pickTime = dtpk.Value.ToString("yyyy-MM-dd");
+            return pickTime;
         }
     }
 
