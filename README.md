@@ -1,7 +1,9 @@
 # reservation_system
 독서실 예약관리 시스템입니다.
 
+## 실행 화면
 
+![run](./run.gif)
 
 # 프로그램 상황
 
